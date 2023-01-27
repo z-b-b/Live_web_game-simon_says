@@ -1,0 +1,176 @@
+<!-- משחק סיימון אומר -->
+<!-- נכתב ע״י זאב בן-בסת -->
+
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>משחק סיימון אומר</title>
+        </head>
+        <body>
+            <!-- תצוגת המשחק בדף -->
+            <header>
+                <center><h1 id="player_turn"><u>סיימון אומר</u></h1></center>
+            </header>
+            <main>
+                <div style="display: flex; justify-content: center;" class="container">
+                    <div id="green_square" style="height: 100px; width: 100px; border: 5px solid black; background-color: green;"></div> 
+                    <div id="red_square" style="height: 100px; width: 100px; border: 5px solid black; background-color: red;"></div> 
+                </div>
+                <div style="display: flex; justify-content: center;" class="container">
+                    <div id="yellow_square" style="height: 100px; width: 100px; border: 5px solid black; background-color: yellow;"></div> 
+                    <div id="blue_square" style="height: 100px; width: 100px; border: 5px solid black; background-color: blue;"></div> 
+                </div>
+                <br>
+                <center>
+                    <button type="button" id="finished_playing">בדוק-וסיים משחק</button>
+                    <button type="button" id="start_playing">התחל משחק</button>
+                </center>
+                <br>
+            </main>
+            <script>
+                // הריבועים שבדף        
+                var green_square = document.getElementById("green_square");
+                var red_square = document.getElementById("red_square");
+                var yellow_square = document.getElementById("yellow_square");
+                var blue_square = document.getElementById("blue_square");
+
+                var change_the_title = document.getElementById("player_turn");
+
+                // בודק כניסה, כמה להיכנס, קוצב זמן
+                var count_entries = 0;
+                var game_setting = Math.floor(Math.random() * 6) + 1;
+                var timer_id;
+                
+                // שתי מחלקות אחת למחשב ואחת לשחקן מונות את הריבועים שבחר המחשב והשחקן
+                class computerCount {
+                    constructor(green, red, yellow, blue) {
+                        this.green = green;
+                        this.red = red;
+                        this.yellow = yellow;
+                        this.blue = blue;
+                    };
+                    
+                    greenSquareCount() {
+                        this.green++;
+                    };
+
+                    redSquareCount() {
+                        this.red++;
+                    };
+
+                    yellowSquareCount() {
+                        this.yellow++;
+                    };
+
+                    blueSquareCount() {
+                        this.blue++;
+                    };
+                };
+
+                class playerCount {
+                    constructor(green, red, yellow, blue) {
+                        this.green = green;
+                        this.red = red;
+                        this.yellow = yellow;
+                        this.blue = blue;
+                    };
+                    
+                    greenSquareCount() {
+                        this.green++;
+                    };
+
+                    redSquareCount() {
+                        this.red++;
+                    };
+
+                    yellowSquareCount() {
+                        this.yellow++;
+                    };
+
+                    blueSquareCount() {
+                        this.blue++;
+                    };
+                };
+
+                var computer_turn = new computerCount(0, 0, 0, 0);
+                var user_turn = new playerCount(0, 0, 0, 0);
+
+                // לחיצת התחל משחק המחשב מתחיל לבחור ריבועים
+                start_playing.onclick = () => {
+                    timer_id = setInterval(HideSquares, 2000);
+                };
+
+                function HideSquares() {
+                    if (count_entries == game_setting) {
+                        clearInterval(timer_id);
+                        change_the_title.textContent = "!עכשיו תורך"
+                        return 0;
+                    }
+                    
+                    count_entries++;
+
+                    let which_square = Math.floor(Math.random() * 4) + 1;
+
+                    if (which_square == 1) {
+                        green_square.style.backgroundColor = "white";
+                        setTimeout(ShowSquares, 1000, green_square, "green");
+                        computer_turn.greenSquareCount();
+
+                    } else if (which_square == 2) {
+                        red_square.style.backgroundColor = "white";
+                        setTimeout(ShowSquares, 1000, red_square, "red");
+                        computer_turn.redSquareCount();
+                        
+                    } else if (which_square == 3) {
+                        yellow_square.style.backgroundColor = "white";
+                        setTimeout(ShowSquares, 1000, yellow_square, "yellow");
+                        computer_turn.yellowSquareCount();
+
+                    } else if (which_square == 4) {
+                        blue_square.style.backgroundColor = "white";
+                        setTimeout(ShowSquares, 1000, blue_square, "blue");
+                        computer_turn.blueSquareCount();
+                    }
+                };
+
+                // לאחר ההסתרה הריבוע מופיע שוב
+                function ShowSquares(square, background_color) {
+                    square.style.backgroundColor = background_color;
+                };
+
+                // סופרות את הריבועים שעליהם לחץ השחקן
+                green_square.onclick = () => {
+                    user_turn.greenSquareCount();
+                };
+
+                red_square.onclick = () => {
+                    user_turn.redSquareCount();
+                }; 
+
+                yellow_square.onclick = () => {
+                    user_turn.yellowSquareCount();
+                };
+
+                blue_square.onclick = () => {
+                    user_turn.blueSquareCount();
+                };
+
+                // בסיום המשחק מתבררת התוצאה
+                finished_playing.onclick = () => {
+                    if ((computer_turn.green  == user_turn.green)  &&
+                        (computer_turn.red    == user_turn.red)    &&
+                        (computer_turn.yellow == user_turn.yellow) &&
+                        (computer_turn.blue   == user_turn.blue)) {
+
+                            document.write("<h1><center>:) !ניצחת</center></h1>");
+                        }
+                    else {
+                            document.write("<h1><center>:( !הפסדת</center></h1>");
+                    }
+                };
+            </script>
+        </body>
+    </html>
